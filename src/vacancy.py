@@ -1,14 +1,23 @@
+from typing import Optional, Any
+
+
 class Vacancy:
+    """Класс  реализации вакансий"""
     __slots__ = ("name", "salary", "url", "description", "salary_from", "salary_to")
 
-    def __init__(self, name, salary, url, description):
+    def __init__(self, name: str, salary: int, url: str, description: str) -> None:
         """Метод инициализации параметров вакансий"""
         self.name = name
         self.url = url
         self.description = description
         self.__validate_salary(salary)
 
-    def __validate_salary(self, salary):
+    def __str__(self):
+        """Метод красивого возврата вакансии"""
+        return f"""Название вакансии: {self.name},\nСсылка на вакансию: {self.url},
+Зарплата: от {self.salary_from} до {self.salary_to},\nОписание вакансии: {self.description}\n"""
+
+    def __validate_salary(self, salary: dict[str]) -> Optional[Any]:
         """ Метод валидации валюты для  корректного возврата"""
         if not salary:
             self.salary_from = 0
@@ -21,7 +30,17 @@ class Vacancy:
         """Метод сравнения зп"""
         return self.salary_from < other.salary_from
 
-    def __str__(self):
-        """Метод красивого возврата вакансии"""
-        return f"""Название вакансии: {self.name}, Ссылка на вакансию: {self.url}, 
-        Зарплата: от  {self.salary_from} до {self.salary_to}, Описание вакансии: {self.description}, """
+    @classmethod
+    def from_dict(cls, data: Optional) -> Optional:
+        """Метод преобразование в объект класса"""
+        return cls(
+            name=data["name"],
+            url=data["alternate_url"],
+            salary=Vacancy.__validate_salary(data),
+            description=data["description"])
+
+    @classmethod
+    def to_dict(cls, vacancy):
+        """Метод преобразование в словарь"""
+        return {"name": vacancy.name, "url": vacancy.url,
+                "salary": {"from": vacancy.salary_from, "to": vacancy.salary_to}, "description": vacancy.description}

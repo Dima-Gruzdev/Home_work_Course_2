@@ -1,6 +1,6 @@
 import pytest
 
-from src.Abstract_class import HHAPI
+from src.hh_api import HHAPI
 from src.json_saver_vacancy import JSONSaver
 from src.vacancy import Vacancy
 
@@ -51,3 +51,22 @@ def vacancy_without_salary():
         url="https://hh.ru/vacancy/456 ",
         description="Требуется Java разработчик"
     )
+
+
+def json_sav_test():
+    """Создает экземпляр JSONSaver для тестирования."""
+    return JSONSaver(path="test_vacancies.json")
+
+
+@pytest.fixture
+def sample_vacancies():
+    return [
+        Vacancy("Python Developer", {"from": 80000, "to": 120000}, "https://example.com/1",
+                "Looking for Python developer with Django and Flask experience"),
+        Vacancy("Java Developer", {"from": 90000, "to": 130000}, "https://example.com/2",
+                "We are hiring a Java developer with Spring Boot expertise"),
+        Vacancy("Frontend Developer", {}, "https://example.com/3",
+                "Need JavaScript and React.js skilled developer"),
+        Vacancy("Data Analyst", {"from": 70000}, "https://example.com/4",
+                "Experience with SQL and data visualization is required"),
+    ]

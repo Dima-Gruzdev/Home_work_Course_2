@@ -3,17 +3,18 @@ import requests
 
 
 class AbstractAPI(ABC):
-
+    """Абстрактный класс для соединение и запроса вакансий"""
     @abstractmethod
     def _connect(self):
         pass
 
     @abstractmethod
-    def load_vacancies(self):
+    def load_vacancies(self, text):
         pass
 
 
-class HHAPI:
+class HHAPI(AbstractAPI):
+    """ Класс для соединение с АПИ """
     def __init__(self):
         """Метод инициализации параметров API"""
         self.__url = "https://api.hh.ru/vacancies"
@@ -27,7 +28,7 @@ class HHAPI:
         else:
             print("Ошибка соединения")
 
-    def load_vacancies(self, text):
+    def load_vacancies(self, text: str) -> list:
         """Метод запроса вакансий"""
         self.__params["text"] = text
         all_vacancies = []
@@ -38,7 +39,7 @@ class HHAPI:
         return all_vacancies
 
     @staticmethod
-    def filter_vacancy(vacancies):
+    def filter_vacancy(vacancies: list) -> list:
         """Метод фильтрация возращаемого запроса"""
         all_vacancies = []
         for vacancy in vacancies:

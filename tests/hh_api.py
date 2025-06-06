@@ -1,6 +1,6 @@
 from unittest.mock import patch, MagicMock
 
-from src.Abstract_class import HHAPI
+from src.hh_api import HHAPI
 
 
 def test_initialization(hh_api):
